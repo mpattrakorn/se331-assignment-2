@@ -7,9 +7,8 @@ import {NgModule} from "@angular/core";
 /**
  * Created by CAMT on 2/17/2017.
  */
-const productRoutes: Routes = [{
-  path: 'info', component: InformationComponent,
-},
+const productRoutes: Routes = [
+{path: 'info/:id', component: InformationComponent},
 {path: 'add', component: ProductComponent},
 {path: 'list', component: infoListComponent},
 {

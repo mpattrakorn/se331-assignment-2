@@ -1,5 +1,7 @@
+import { Router } from '@angular/router';
+import { ProductDataServerService } from './../../services/product-data-server.service';
 import {
-    Component
+    Component,ElementRef, Input, ViewChild
 } from '@angular/core';
 import {
     Product
@@ -17,45 +19,32 @@ import {
 export class ProductComponent {
 
 
-    products: Product = new Product();
+   products: any = {};
 
     //productArr: Product[];
 
-    constructor(private productDataService: ProductDataService){}
+    constructor(private productDataServerService: ProductDataServerService, private router: Router){}
 
     // ngOnInit() {
     //     console.log(this.products);
     // }
 
+  @ViewChild('productImage') inputEl: ElementRef;
+  addProduct() {
+    let result: Product;
+    let inputEl: HTMLInputElement = this.inputEl.nativeElement;
 
-    addProduct(productImage) {
-        if(productImage.length === 0){
-            this.products.image = "no picture";
+    this.productDataServerService.addProduct(this.products,inputEl.files.item(0))
+      .subscribe(resultProduct => {
+        result = resultProduct
+        if (result != null){
+          this.router.navigate(['/list']);
+        }else{
+          alert("Error in adding the product");
         }
-        else {
-            this.products.image = productImage[0].name;
-        }
-        this.productDataService.addProduct(this.products);
-        alert("the product is successfully added \n"+
-        "id:" + this.products.id + "\n"+
-        "name:" + this.products.name + "\n"+
-        "description:" + this.products.description + "\n"+
-        "image:" + this.products.image + "\n"+
-        "price:" + this.products.price + "\n"+
-        "amount:" + this.products.amount + "\n"+
-        "rate:" + this.products.rate + "\n" );
-          
-    }
+      });
+  }
 
-    resetProduct(){
-        this.products.id = null;
-        this.products.name = "";
-        this.products.description = "";
-        this.products.image = "";
-        this.products.price = null;
-        this.products.amount = null;
-        this.products.rate = null;
-    }
 
 
 }

@@ -1,3 +1,4 @@
+import { ProductDataServerService } from './../../services/product-data-server.service';
 import {
     Component
 } from '@angular/core';
@@ -10,6 +11,7 @@ import {
 import{
     ProductDataFileService
 }from '../../services/product-data-file.service';
+import {ActivatedRoute, Params} from "@angular/router";
 
 @Component({
     selector: 'showInfo',
@@ -18,14 +20,23 @@ import{
 })
 export class InformationComponent {
 
-    products: Product[] = [];
+    constructor(private route: ActivatedRoute, private productDataServerService: ProductDataServerService) {}
+   product: Product;
+   isNoData:boolean;
+   ngOnInit() {
+      this.isNoData = false;
 
-    constructor(private productDataService: ProductDataService){}
+      this.route.params
+        .switchMap((params:Params) =>  this.productDataServerService.getProduct(+params['id']))
+        .subscribe((product: Product) => {
+          if (product !== null)
+            this.product = product;
+          else
+            this.isNoData = true;
+        }
+        );
 
-    ngOnInit() {
-        this.products = this.productDataService.getAllProduct();
-    }
-
+  }
 
 
 }

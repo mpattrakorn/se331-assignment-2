@@ -1,3 +1,5 @@
+import { ProductDataServerService } from './../../services/product-data-server.service';
+import { Router } from '@angular/router';
 import {
     Component
 } from '@angular/core';
@@ -20,10 +22,13 @@ export class infoListComponent {
 
     products: Product[] = [];
 
-    constructor(private productDataService: ProductDataService){}
+    constructor(private productDataServerService: ProductDataServerService , private router: Router){}
 
     ngOnInit() {
-        this.products = this.productDataService.getAllProduct();
+        this.productDataServerService.getProductData()
+        .subscribe(resultProduct => {
+            this.products = resultProduct;
+        })
     }
 
     checkString(product){
@@ -35,14 +40,7 @@ export class infoListComponent {
     }
 
     showInfo(product){
-        alert("product's information: \n" +
-        "id: " + product.id + "\n"+
-        "name: " + product.name + "\n"+
-        "description: " + product.description + "\n"+
-        "image: " + product.image + "\n"+
-        "price: " + product.price + "\n"+
-        "amount: " + product.amount + "\n"+
-        "rate: " + product.rate + "\n" );
+        this.router.navigate(['/info',product.id]);
     }
 
 

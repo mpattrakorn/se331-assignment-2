@@ -7,21 +7,27 @@ import {
 import {
     Product
 } from '../Product/Product'
+import {
+    Http
+}from '@angular/http';
 
 
 @Injectable()
 export class ProductDataService {
-    products: Product[] = PRODUCTS;
-    getProductData() {
-        return PRODUCTS;
-    }
-    addProduct(newProduct) {
-    	this.products.push(newProduct);
-        console.log(newProduct);
-    }
+  constructor(private http: Http){}
 
-    getAllProduct() {
-        return this.products;
-    }
-   
+  getProductData(){
+    let productArray:Product[];
+    return this.http.get('app/data/product.json')
+      .map(res => res.json().products);
+
+  }
+
+  getProduct(id:number){
+   return null;
+  }
+
+  addProduct(product: Product, imageFile:any){
+    return null;
+  }
 }
